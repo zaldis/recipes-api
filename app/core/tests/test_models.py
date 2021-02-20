@@ -26,3 +26,19 @@ class ModelTests(TestCase):
         email = 'test.user@GMAIL.COM'
         user = get_user_model().objects.create_user(email=email)
         self.assertEqual(user.email, email.lower())
+
+    def test_email_validation(self):
+        """
+            All users must have email address
+        """
+        with self.assertRaises(ValueError):
+            get_user_model().objects.create_user(email=None, password='secret')
+
+    def test_superuser_creation(self):
+        """
+            Custom user model must provide api to create superuser
+        """
+        user = get_user_model().objects.create_superuser(
+                    email='super.user@gmail.com', password='secret')
+        self.assertTrue(user.is_superuser)
+        self.assertTrue(user.is_staff)
