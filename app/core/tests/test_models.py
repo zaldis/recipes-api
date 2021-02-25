@@ -54,3 +54,9 @@ class ModelTests(TestCase):
         """ Tag should be convertable to string as tag's name """
         tag = models.Tag.objects.create(user=create_user(), name='Vegan')
         self.assertEqual(str(tag), tag.name)
+
+    def test_ingredient_representation(self):
+        """ Ingredient should be convertable to string as ingredient's name """
+        ingredient = models.Ingredient.objects.create(user=create_user(),
+                                                      name='Cucumber')
+        self.assertEqual(str(ingredient), ingredient.name)
