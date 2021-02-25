@@ -1,6 +1,13 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 
+from core import models
+
+
+def create_user(email='user@mail.com', password='secret'):
+    """ Create base user """
+    return get_user_model().objects.create_user(email, password)
+
 
 class ModelTests(TestCase):
 
@@ -42,3 +49,8 @@ class ModelTests(TestCase):
                     email='super.user@gmail.com', password='secret')
         self.assertTrue(user.is_superuser)
         self.assertTrue(user.is_staff)
+
+    def test_tag_representation(self):
+        """ Tag should be convertable to string as tag's name """
+        tag = models.Tag.objects.create(user=create_user(), name='Vegan')
+        self.assertEqual(str(tag), tag.name)
