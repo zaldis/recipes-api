@@ -46,7 +46,19 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         """ Retrieve the recipes for the authenticated user """
-        return self.queryset.filter(user=self.request.user)
+        tags = self.request.query_params.get('tags')
+        ingredients = self.request.query_params.get('ingredients')
+        queryset = self.queryset
+
+        if tags:
+            tag_ids = list(map(int, tags.split(',')))
+            queryset = queryset.filter(tags__id__in=tag_ids)
+
+        if ingredients:
+            ingredient_ids = list(map(int, ingredients.split(',')))
+            queryset = queryset.filter(ingredients__id__in=ingredient_ids)
+
+        return queryset.filter(user=self.request.user)
 
     def get_serializer_class(self):
         serializers_map = {
